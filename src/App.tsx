@@ -5,32 +5,28 @@ import { EmptyState } from './components/EmptyState';
 import { PendingBar } from './components/PendingBar';
 import { PickItemDialog } from './dialogs/PickItemDialog';
 import { PreviewDialog } from './dialogs/PreviewDialog';
-import { SettingsDialog } from './dialogs/SettingsDialog';
 import { BungieApi } from './lib/bungieApi';
 import { Catalog } from './lib/catalog';
-import { loadConfig, saveConfig } from './lib/config';
 import { downloadText, timestampSuffix } from './lib/downloads';
 import { applyChanges, parseSettings } from './lib/settingsFile';
-import type { AppConfig, CharacterInfo, PendingChange } from './types';
+import type { CharacterInfo, PendingChange } from './types';
 
 const catalog = new Catalog();
 catalog.load();
 
 export default function App() {
-  const [config, setConfig] = useState<AppConfig>(() => loadConfig());
   const [fileName, setFileName] = useState<string | null>(null);
   const [rawText, setRawText] = useState<string>('');
   const [characters, setCharacters] = useState<CharacterInfo[]>([]);
   const [parseError, setParseError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [pending, setPending] = useState<PendingChange[]>([]);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [pickTarget, setPickTarget] = useState<{ characterIndex: number; slotName: string } | null>(null);
   const [catalogVersion, setCatalogVersion] = useState(0);
   const [dragActive, setDragActive] = useState(false);
 
-  const bungie = useMemo(() => new BungieApi(config.bungieApiKey), [config.bungieApiKey]);
+  const bungie = useMemo(() => new BungieApi(), []);
 
   const loadFile = useCallback(async (file: File) => {
     try {
@@ -134,11 +130,6 @@ export default function App() {
     downloadText(`${originalBase}.${ts}.bak.json`, rawText);
   }
 
-  function handleSaveConfig(next: AppConfig) {
-    setConfig(next);
-    saveConfig(next);
-  }
-
   const activeCharacter = characters[Math.min(activeTab, characters.length - 1)];
   const pickCurrentSlot = pickTarget
     ? characters[pickTarget.characterIndex]?.slots.find((s) => s.slotName === pickTarget.slotName)
@@ -156,7 +147,6 @@ export default function App() {
         onOpen={(f) => void loadFile(f)}
         onDownloadOriginal={handleDownloadOriginal}
         canDownloadOriginal={rawText.length > 0}
-        onOpenSettings={() => setSettingsOpen(true)}
       />
 
       {characters.length === 0 ? (
@@ -214,13 +204,6 @@ export default function App() {
         onApply={handleApply}
         backupFilename={backupPreview}
         outputFilename="settings.json"
-      />
-
-      <SettingsDialog
-        open={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-        config={config}
-        onSave={handleSaveConfig}
       />
 
       {dragActive ? (

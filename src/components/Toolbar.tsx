@@ -4,7 +4,6 @@ interface ToolbarProps {
   fileName: string | null;
   onOpen: (file: File) => void;
   onDownloadOriginal: () => void;
-  onOpenSettings: () => void;
   canDownloadOriginal: boolean;
 }
 
@@ -12,7 +11,6 @@ export function Toolbar({
   fileName,
   onOpen,
   onDownloadOriginal,
-  onOpenSettings,
   canDownloadOriginal,
 }: ToolbarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -52,12 +50,6 @@ export function Toolbar({
             title="Download a timestamped copy of the file as it was uploaded"
           >
             Download backup
-          </button>
-          <button
-            onClick={onOpenSettings}
-            className="rounded border border-slate-700 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 hover:bg-slate-700"
-          >
-            Settings…
           </button>
           <input
             ref={inputRef}

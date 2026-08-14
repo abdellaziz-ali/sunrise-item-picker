@@ -10,7 +10,7 @@ export const DEFAULT_BUNGIE_API_KEY = 'e96ece71cb584589a53f4800433dffbe';
 export class BungieApi {
   private readonly apiKey: string;
 
-  constructor(userKey: string | undefined) {
+  constructor(userKey?: string) {
     const trimmed = userKey?.trim();
     this.apiKey = trimmed && trimmed.length > 0 ? trimmed : DEFAULT_BUNGIE_API_KEY;
   }

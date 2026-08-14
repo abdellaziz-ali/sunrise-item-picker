@@ -59,19 +59,18 @@ any Pages subpath without configuration.
 
 ## Bungie API key
 
-A shared API key is bundled with the app so item lookup works out of the box —
-no setup needed.
+A shared API key is bundled with the app so item lookup and icons work out of
+the box — no setup, no dialog, nothing to configure.
 
-If you'd rather use your own (for privacy or to isolate from the shared rate
-limit), grab one at <https://www.bungie.net/en/Application>:
+If you fork this repo and want your own key (for rate-limit isolation or
+privacy), grab one at <https://www.bungie.net/en/Application> and swap the
+single constant in [src/lib/bungieApi.ts](src/lib/bungieApi.ts):
 
-1. Create a new app.
-2. Any name works. Set OAuth redirect URL to `https://localhost`.
-3. Copy the **API Key**.
-4. Paste it in the tool via **Settings…** — it overrides the bundled key.
+```ts
+export const DEFAULT_BUNGIE_API_KEY = 'YOUR_KEY_HERE';
+```
 
-Your key stays in your browser's `localStorage`. Clear the field and Save to
-revert to the bundled key. Requests only ever go to `bungie.net`.
+Any redirect URL works for API-key-only use — the OAuth flow isn't used.
 
 ## Safety rails
 
@@ -90,7 +89,6 @@ Everything in-browser via `localStorage`:
 
 | Key                            | Contents                                     |
 | ------------------------------ | -------------------------------------------- |
-| `sunrise-item-picker/config`   | Bungie API key                               |
 | `sunrise-item-picker/catalog`  | Items you've saved via *Add to catalog*      |
 
 Clear it via the browser's dev tools → Application → Local Storage.

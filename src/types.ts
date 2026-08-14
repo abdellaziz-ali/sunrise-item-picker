@@ -45,13 +45,3 @@ export interface BungieItemInfo {
   typeAndTier?: string;
   hexHash: string;
 }
-
-export interface AppConfig {
-  bungieApiKey?: string;
-}
-
-export interface LoadedFile {
-  name: string;
-  rawText: string;
-  characters: CharacterInfo[];
-}
