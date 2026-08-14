@@ -169,9 +169,22 @@ export function PickItemDialog({
           </div>
           <div className="scrollbar-thin max-h-[420px] overflow-auto">
             {filtered.length === 0 ? (
-              <div className="p-4 text-sm text-slate-500">
-                Your catalog is empty for this slot. Look up an item on the right and click{' '}
-                <span className="text-amber-400">Add to catalog</span> to save it.
+              <div className="space-y-2 p-4 text-sm text-slate-400">
+                <p>No items yet for this slot.</p>
+                <p>
+                  Grab a hash from{' '}
+                  <a
+                    href="https://www.light.gg/db/items/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-amber-400 hover:underline"
+                  >
+                    light.gg
+                  </a>
+                  , paste it on the right, then click{' '}
+                  <span className="text-amber-400">Add to catalog</span> to keep
+                  it here for next time.
+                </p>
               </div>
             ) : (
               <ul className="divide-y divide-slate-800">
@@ -198,7 +211,17 @@ export function PickItemDialog({
         </section>
 
         <section className="p-4">
-          <div className="mb-3 text-xs uppercase text-slate-500">Custom hash</div>
+          <div className="mb-3 flex items-baseline justify-between">
+            <span className="text-xs uppercase text-slate-500">Custom hash</span>
+            <a
+              href="https://www.light.gg/db/items/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-amber-400 hover:underline"
+            >
+              Find hashes on light.gg ↗
+            </a>
+          </div>
           <label className="mb-1 block text-xs text-slate-400">Hash</label>
           <div className="mb-3 flex gap-2">
             <input

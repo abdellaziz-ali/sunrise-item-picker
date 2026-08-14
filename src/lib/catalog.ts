@@ -1,4 +1,5 @@
 import { normalizeHash } from './hashParser';
+import { STARTER_CATALOG } from './starterCatalog';
 import type { PresetItem } from '../types';
 
 const KEY = 'sunrise-item-picker/catalog';
@@ -34,19 +35,21 @@ function writeStored(items: PresetItem[]): void {
 }
 
 export class Catalog {
-  private items: PresetItem[] = [];
+  private userItems: PresetItem[] = [];
 
   load(): void {
-    this.items = readStored();
+    this.userItems = readStored();
   }
 
   all(): PresetItem[] {
-    return this.items.slice();
+    const userHashes = new Set(this.userItems.map((i) => i.hash.toLowerCase()));
+    const seeded = STARTER_CATALOG.filter((s) => !userHashes.has(s.hash.toLowerCase()));
+    return [...this.userItems, ...seeded];
   }
 
   findByHash(hash: string): PresetItem | undefined {
-    const normalized = normalizeHash(hash);
-    return this.items.find((i) => i.hash.toLowerCase() === normalized.toLowerCase());
+    const normalized = normalizeHash(hash).toLowerCase();
+    return this.all().find((i) => i.hash.toLowerCase() === normalized);
   }
 
   addOrUpdate(item: PresetItem): void {
@@ -55,15 +58,15 @@ export class Catalog {
       hash: normalizeHash(item.hash),
       isUserAdded: true,
     };
-    const idx = this.items.findIndex((i) => i.hash.toLowerCase() === normalized.hash.toLowerCase());
-    if (idx >= 0) this.items[idx] = normalized;
-    else this.items.push(normalized);
-    writeStored(this.items);
+    const idx = this.userItems.findIndex((i) => i.hash.toLowerCase() === normalized.hash.toLowerCase());
+    if (idx >= 0) this.userItems[idx] = normalized;
+    else this.userItems.push(normalized);
+    writeStored(this.userItems);
   }
 
   remove(hash: string): void {
     const normalized = normalizeHash(hash);
-    this.items = this.items.filter((i) => i.hash.toLowerCase() !== normalized.toLowerCase());
-    writeStored(this.items);
+    this.userItems = this.userItems.filter((i) => i.hash.toLowerCase() !== normalized.toLowerCase());
+    writeStored(this.userItems);
   }
 }
