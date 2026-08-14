@@ -99,11 +99,6 @@ export function PickItemDialog({
       return;
     }
 
-    if (!bungie.hasApiKey) {
-      setLookup({ hash: parsedCustom.formatted, loading: false, error: null, info: null });
-      return;
-    }
-
     setLookup({ hash: parsedCustom.formatted, loading: true, error: null, info: null });
     try {
       const info = await bungie.lookupItem(parsedCustom.decimal, ctrl.signal);
@@ -112,7 +107,7 @@ export function PickItemDialog({
         setLookup({
           hash: parsedCustom.formatted,
           loading: false,
-          error: 'Lookup failed. Check your API key or network.',
+          error: 'Bungie returned no data for this hash (may be redacted or invalid).',
           info: null,
         });
         return;
@@ -124,7 +119,7 @@ export function PickItemDialog({
         setLookup({
           hash: parsedCustom.formatted,
           loading: false,
-          error: 'Lookup failed.',
+          error: 'Lookup failed. Check your network connection.',
           info: null,
         });
       }
@@ -263,8 +258,7 @@ export function PickItemDialog({
               </div>
             ) : (
               <div className="text-sm text-amber-300">
-                {lookup.error ??
-                  `${lookup.hash} — no Bungie API key set, so no name or icon available.`}
+                {lookup.error ?? `${lookup.hash} — no display data returned.`}
               </div>
             )}
           </div>

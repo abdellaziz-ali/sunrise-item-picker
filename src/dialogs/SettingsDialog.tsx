@@ -18,14 +18,14 @@ export function SettingsDialog({ open, onClose, config, onSave }: SettingsDialog
       <div className="space-y-6 p-6">
         <div>
           <label className="mb-1 block text-sm font-medium text-slate-200">
-            Bungie API key (optional)
+            Bungie API key (override — optional)
           </label>
           <div className="flex gap-2">
             <input
               type={visible ? 'text' : 'password'}
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Paste your Bungie API key here"
+              placeholder="Leave empty to use the built-in key"
               className="flex-1 rounded border border-slate-700 bg-slate-800 px-3 py-2 font-mono text-sm text-slate-100 outline-none focus:border-amber-500"
             />
             <button
@@ -36,8 +36,11 @@ export function SettingsDialog({ open, onClose, config, onSave }: SettingsDialog
             </button>
           </div>
           <p className="mt-2 text-xs text-slate-400">
-            Used only to look up item names and icons for custom hashes. Stored in your browser's
-            localStorage. Never sent anywhere except <code className="font-mono">bungie.net</code>.
+            A shared API key is bundled with the app so item lookup works out of
+            the box. Paste your own key here if you want isolation from the
+            shared rate limit — every request will use your key instead. Stored
+            in your browser's localStorage and only sent to{' '}
+            <code className="font-mono">bungie.net</code>.
           </p>
           <p className="mt-2 text-xs text-slate-400">
             Get one for free at{' '}
@@ -54,8 +57,7 @@ export function SettingsDialog({ open, onClose, config, onSave }: SettingsDialog
         </div>
 
         <div className="rounded border border-slate-700 bg-slate-950 p-3 text-xs text-slate-400">
-          Without a key: custom-hash items still work — you just need to know the hash and won't see
-          a name or icon. Catalog items you've saved keep their name and icon regardless.
+          To revert to the built-in key: clear this field and click Save.
         </div>
       </div>
       <footer className="flex justify-end gap-2 border-t border-slate-800 bg-slate-900 p-3">

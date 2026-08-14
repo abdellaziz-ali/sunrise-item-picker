@@ -57,18 +57,21 @@ Included: [.github/workflows/deploy-web.yml](.github/workflows/deploy-web.yml).
 The site uses relative URLs (`base: './'` in `vite.config.ts`), so it works from
 any Pages subpath without configuration.
 
-## Bungie API key (optional)
+## Bungie API key
 
-Custom-hash icons and names need a free Bungie API key. Grab one at
-<https://www.bungie.net/en/Application>:
+A shared API key is bundled with the app so item lookup works out of the box —
+no setup needed.
+
+If you'd rather use your own (for privacy or to isolate from the shared rate
+limit), grab one at <https://www.bungie.net/en/Application>:
 
 1. Create a new app.
 2. Any name works. Set OAuth redirect URL to `https://localhost`.
 3. Copy the **API Key**.
-4. Paste it in the tool via **Settings…**.
+4. Paste it in the tool via **Settings…** — it overrides the bundled key.
 
-The key stays in your browser's `localStorage`. It's never sent anywhere except
-`bungie.net`.
+Your key stays in your browser's `localStorage`. Clear the field and Save to
+revert to the bundled key. Requests only ever go to `bungie.net`.
 
 ## Safety rails
 
