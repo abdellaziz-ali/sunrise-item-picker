@@ -30,18 +30,11 @@ export function EmptyState({ onOpen }: EmptyStateProps) {
         </div>
         <div className="mt-6 rounded border border-amber-900/40 bg-amber-950/20 p-3 text-left text-xs text-amber-200/80">
           <div className="mb-1 font-semibold text-amber-300">Heads-up</div>
-          Sunrise runs the August 2020 / Season 11 client. Only items that
-          existed then will actually equip — modern hashes silently fail or
-          leave the old item in place. Use the{' '}
-          <a
-            href="https://www.light.gg/db/all/weapons/?filter-fadv=season%3A11"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-amber-100"
-          >
-            light.gg Season 11 filter
-          </a>
-          {' '}when picking custom hashes.
+          Sunrise runs the August 2020 / Season 11 client. This tool ships with
+          a catalog of <strong>~7,000 pre-Beyond-Light items</strong> — every
+          weapon, armor piece, ghost, sparrow, ship, and emblem that existed in
+          Aug 2020. Anything newer (Beyond Light, Witch Queen, Stasis / Strand,
+          modern subclasses, weapon reissues) won't equip.
         </div>
       </div>
     </div>

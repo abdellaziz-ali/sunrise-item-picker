@@ -1,8 +1,8 @@
 import { normalizeHash } from './hashParser';
-import { STARTER_CATALOG } from './starterCatalog';
 import type { PresetItem } from '../types';
 
 const KEY = 'sunrise-item-picker/catalog';
+const CATALOG_URL = `${import.meta.env.BASE_URL}season11-catalog.json`;
 
 interface Stored {
   version: number;
@@ -36,15 +36,34 @@ function writeStored(items: PresetItem[]): void {
 
 export class Catalog {
   private userItems: PresetItem[] = [];
+  private remoteItems: PresetItem[] = [];
+  remoteLoading = false;
+  remoteError: string | null = null;
 
   load(): void {
     this.userItems = readStored();
   }
 
+  async fetchRemote(): Promise<void> {
+    if (this.remoteItems.length > 0 || this.remoteLoading) return;
+    this.remoteLoading = true;
+    try {
+      const res = await fetch(CATALOG_URL);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = (await res.json()) as PresetItem[];
+      this.remoteItems = data.map((item) => ({ ...item, hash: normalizeHash(item.hash) }));
+      this.remoteError = null;
+    } catch (err) {
+      this.remoteError = err instanceof Error ? err.message : String(err);
+    } finally {
+      this.remoteLoading = false;
+    }
+  }
+
   all(): PresetItem[] {
     const userHashes = new Set(this.userItems.map((i) => i.hash.toLowerCase()));
-    const seeded = STARTER_CATALOG.filter((s) => !userHashes.has(s.hash.toLowerCase()));
-    return [...this.userItems, ...seeded];
+    const remote = this.remoteItems.filter((r) => !userHashes.has(r.hash.toLowerCase()));
+    return [...this.userItems, ...remote];
   }
 
   findByHash(hash: string): PresetItem | undefined {

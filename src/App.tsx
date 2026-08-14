@@ -28,6 +28,10 @@ export default function App() {
 
   const bungie = useMemo(() => new BungieApi(), []);
 
+  useEffect(() => {
+    void catalog.fetchRemote().then(() => setCatalogVersion((v) => v + 1));
+  }, []);
+
   const loadFile = useCallback(async (file: File) => {
     try {
       const text = await file.text();
