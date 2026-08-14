@@ -41,6 +41,15 @@ const BUCKET_TO_SLOT: Record<string, string> = {
   '3683254069': 'finisher',
 };
 
+// Known post-BL items that Bungie tagged with a pre-BL watermark (usually
+// Nightfall exotics from 2023+ that reuse Shadowkeep's watermark). They can't
+// be distinguished from real pre-BL items by any manifest field, so we
+// blacklist by decimal hash. Extend when new false positives are reported.
+const HASH_BLACKLIST = new Set<string>([
+  '2200470033', // Cull's Shadow — post-BL Nightfall exotic
+  '2197778303', // Fafnir          — post-BL Nightfall exotic
+]);
+
 // Each Sunrise slot must match a specific Bungie DestinyItemType. This filters
 // out "Dummy" (itemType=20) items — preview/collectible variants that Bungie
 // ships for its Collections UI. These share names with real weapons but are
@@ -80,6 +89,7 @@ let notPreBl = 0;
 let notEquipable = 0;
 let wrongItemType = 0;
 let redacted = 0;
+let blacklisted = 0;
 let noName = 0;
 let noIcon = 0;
 
@@ -87,6 +97,7 @@ let noIcon = 0;
 const raw2: Array<OutItem & { index: number }> = [];
 
 for (const [hash, item] of Object.entries(items)) {
+  if (HASH_BLACKLIST.has(hash)) { blacklisted++; continue; }
   const wm = item.iconWatermark ?? null;
   if (!PRE_BL_WATERMARKS.has(wm)) { notPreBl++; continue; }
   const bucketHash = item.inventory?.bucketTypeHash;
@@ -143,5 +154,5 @@ console.log('');
 console.log(`Wrote ${filtered.length} items to ${outPath}`);
 console.log('  Size:', ((await import('node:fs')).statSync(outPath).size / 1024).toFixed(1), 'KB');
 console.log('Slot counts:', bySlot);
-console.log(`Skipped: ${notPreBl} post-BL, ${notEquipable} non-equipable, ${wrongItemType} wrong itemType (dummies etc), ${redacted} redacted, ${noName} nameless, ${noIcon} iconless`);
+console.log(`Skipped: ${notPreBl} post-BL watermark, ${notEquipable} non-equipable, ${wrongItemType} wrong itemType (dummies etc), ${redacted} redacted, ${blacklisted} blacklisted, ${noName} nameless, ${noIcon} iconless`);
 console.log(`Deduped: ${removedDupes} reissue/variant copies collapsed to their oldest hash`);
