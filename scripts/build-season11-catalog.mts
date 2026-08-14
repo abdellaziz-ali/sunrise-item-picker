@@ -43,6 +43,7 @@ interface OutItem {
   slot: string;
   name: string;
   type?: string;
+  rarity?: string;
   iconUrl?: string;
 }
 
@@ -85,6 +86,7 @@ for (const [hash, item] of Object.entries(items)) {
     slot,
     name,
     type: item.itemTypeAndTierDisplayName,
+    rarity: item.inventory?.tierTypeName,
     iconUrl,
   });
 }

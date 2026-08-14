@@ -20,6 +20,7 @@ export interface PresetItem {
   hash: string;
   slot?: string;
   type?: string;
+  rarity?: string;
   iconUrl?: string;
   isUserAdded?: boolean;
 }

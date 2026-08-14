@@ -6,6 +6,17 @@ import { Catalog } from '../lib/catalog';
 import { tryParseHash } from '../lib/hashParser';
 import type { BungieItemInfo, PresetItem } from '../types';
 
+const RARITIES = ['Exotic', 'Legendary', 'Rare', 'Uncommon', 'Common'] as const;
+type Rarity = (typeof RARITIES)[number];
+
+const RARITY_STYLE: Record<Rarity, { active: string; inactive: string }> = {
+  Exotic:    { active: 'bg-amber-500 text-slate-950 border-amber-500',   inactive: 'text-amber-400 border-amber-800/60 hover:bg-amber-950/40' },
+  Legendary: { active: 'bg-violet-500 text-white border-violet-500',      inactive: 'text-violet-300 border-violet-800/60 hover:bg-violet-950/40' },
+  Rare:      { active: 'bg-sky-500 text-white border-sky-500',            inactive: 'text-sky-300 border-sky-800/60 hover:bg-sky-950/40' },
+  Uncommon:  { active: 'bg-emerald-500 text-slate-950 border-emerald-500', inactive: 'text-emerald-300 border-emerald-800/60 hover:bg-emerald-950/40' },
+  Common:    { active: 'bg-slate-400 text-slate-950 border-slate-400',    inactive: 'text-slate-300 border-slate-700 hover:bg-slate-800' },
+};
+
 interface PickItemDialogProps {
   open: boolean;
   onClose: () => void;
@@ -41,6 +52,7 @@ export function PickItemDialog({
   const [customHash, setCustomHash] = useState('');
   const [customName, setCustomName] = useState('');
   const [search, setSearch] = useState('');
+  const [rarityFilter, setRarityFilter] = useState<Set<Rarity>>(() => new Set(RARITIES));
   const [lookup, setLookup] = useState<LookupState | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -49,6 +61,7 @@ export function PickItemDialog({
       setCustomHash('');
       setCustomName('');
       setSearch('');
+      setRarityFilter(new Set(RARITIES));
       setLookup(null);
       abortRef.current?.abort();
     }
@@ -64,14 +77,25 @@ export function PickItemDialog({
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return catalogItems;
-    return catalogItems.filter(
-      (item) =>
+    return catalogItems.filter((item) => {
+      if (item.rarity && !rarityFilter.has(item.rarity as Rarity)) return false;
+      if (!q) return true;
+      return (
         item.name.toLowerCase().includes(q) ||
         item.hash.toLowerCase().includes(q) ||
-        (item.type ?? '').toLowerCase().includes(q),
-    );
-  }, [catalogItems, search]);
+        (item.type ?? '').toLowerCase().includes(q)
+      );
+    });
+  }, [catalogItems, search, rarityFilter]);
+
+  function toggleRarity(r: Rarity) {
+    setRarityFilter((prev) => {
+      const next = new Set(prev);
+      if (next.has(r)) next.delete(r);
+      else next.add(r);
+      return next;
+    });
+  }
 
   const parsedCustom = tryParseHash(customHash);
   const canUseCustom = parsedCustom !== null;
@@ -158,7 +182,7 @@ export function PickItemDialog({
             <div className="mb-1 text-xs uppercase text-slate-500">Current</div>
             <div className="font-mono text-sm text-slate-300">{currentHash}</div>
           </div>
-          <div className="border-b border-slate-800 p-3">
+          <div className="space-y-2 border-b border-slate-800 p-3">
             <input
               type="text"
               value={search}
@@ -166,6 +190,25 @@ export function PickItemDialog({
               placeholder="Search catalog…"
               className="w-full rounded border border-slate-700 bg-slate-800 px-3 py-1.5 text-sm text-slate-100 outline-none focus:border-amber-500"
             />
+            <div className="flex flex-wrap gap-1">
+              {RARITIES.map((r) => {
+                const active = rarityFilter.has(r);
+                const s = RARITY_STYLE[r];
+                return (
+                  <button
+                    key={r}
+                    onClick={() => toggleRarity(r)}
+                    className={`rounded border px-2 py-0.5 text-xs font-medium transition-colors ${active ? s.active : s.inactive}`}
+                    title={active ? `Hide ${r}` : `Show ${r}`}
+                  >
+                    {r}
+                  </button>
+                );
+              })}
+              <div className="ml-auto self-center text-xs text-slate-500">
+                {filtered.length}{catalogItems.length !== filtered.length ? ` of ${catalogItems.length}` : ''}
+              </div>
+            </div>
           </div>
           <div className="scrollbar-thin max-h-[420px] overflow-auto">
             {filtered.length === 0 ? (
