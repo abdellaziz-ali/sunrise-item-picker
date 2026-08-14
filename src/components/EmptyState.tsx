@@ -28,6 +28,21 @@ export function EmptyState({ onOpen }: EmptyStateProps) {
         <div className="mt-6 text-xs text-slate-500">
           Tip: drop the file anywhere on this page.
         </div>
+        <div className="mt-6 rounded border border-amber-900/40 bg-amber-950/20 p-3 text-left text-xs text-amber-200/80">
+          <div className="mb-1 font-semibold text-amber-300">Heads-up</div>
+          Sunrise runs the August 2020 / Season 11 client. Only items that
+          existed then will actually equip — modern hashes silently fail or
+          leave the old item in place. Use the{' '}
+          <a
+            href="https://www.light.gg/db/all/weapons/?filter-fadv=season%3A11"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-amber-100"
+          >
+            light.gg Season 11 filter
+          </a>
+          {' '}when picking custom hashes.
+        </div>
       </div>
     </div>
   );

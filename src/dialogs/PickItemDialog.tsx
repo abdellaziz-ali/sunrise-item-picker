@@ -172,14 +172,14 @@ export function PickItemDialog({
               <div className="space-y-2 p-4 text-sm text-slate-400">
                 <p>No items yet for this slot.</p>
                 <p>
-                  Grab a hash from{' '}
+                  Grab a hash from the{' '}
                   <a
-                    href="https://www.light.gg/db/items/"
+                    href="https://www.light.gg/db/all/weapons/?filter-fadv=season%3A11"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-amber-400 hover:underline"
                   >
-                    light.gg
+                    light.gg Season 11 filter
                   </a>
                   , paste it on the right, then click{' '}
                   <span className="text-amber-400">Add to catalog</span> to keep
@@ -214,12 +214,12 @@ export function PickItemDialog({
           <div className="mb-3 flex items-baseline justify-between">
             <span className="text-xs uppercase text-slate-500">Custom hash</span>
             <a
-              href="https://www.light.gg/db/items/"
+              href="https://www.light.gg/db/all/weapons/?filter-fadv=season%3A11"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-amber-400 hover:underline"
             >
-              Find hashes on light.gg ↗
+              light.gg Season 11 ↗
             </a>
           </div>
           <label className="mb-1 block text-xs text-slate-400">Hash</label>

@@ -64,8 +64,21 @@ export function Toolbar({
           />
         </div>
       </div>
-      <div className="mt-2 text-xs text-amber-300/80">
-        ⚠ Close Destiny 2 before applying changes. This tool runs entirely in your browser — nothing is uploaded anywhere.
+      <div className="mt-2 space-y-0.5 text-xs text-amber-300/80">
+        <div>⚠ Close Destiny 2 before applying. Nothing is uploaded — all edits happen in your browser.</div>
+        <div>
+          Sunrise runs the <strong className="font-semibold">August 2020 / Season 11</strong> client.
+          Only items from that build work —{' '}
+          <a
+            href="https://www.light.gg/db/all/weapons/?filter-fadv=season%3A11"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-amber-200"
+          >
+            light.gg Season 11 filter ↗
+          </a>
+          .
+        </div>
       </div>
     </div>
   );
