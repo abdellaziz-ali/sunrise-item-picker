@@ -22,6 +22,7 @@ export interface PresetItem {
   type?: string;
   rarity?: string;
   iconUrl?: string;
+  charClass?: string;
   isUserAdded?: boolean;
 }
 

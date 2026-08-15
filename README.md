@@ -25,24 +25,28 @@ upload, no tracking.
 ## ⚠️ Important: Sunrise runs the August 2020 client
 
 Sunrise ships with the **Season of Arrivals / Season 11** version of
-Destiny 2. Only items that existed in the game **as of August 2020** will
-actually equip. Newer items (anything from Beyond Light, Witch Queen,
-Lightfall, Final Shape, seasonal exotics from 2021 onward, Stasis / Strand /
-Prismatic subclasses, reissued weapons with new hashes, etc.) will silently
-fail, display wrong, or leave the old item in place.
+Destiny 2 (Shadowkeep build `86657.20.08.23`). Only items that existed in the
+game **as of August 2020** will actually equip. Newer items (anything from
+Beyond Light onward, Witch Queen, Lightfall, Final Shape, seasonal exotics
+from 2021+, Stasis / Strand / Prismatic subclasses, reissued weapons with
+new hashes, etc.) will silently fail, display wrong, or leave the old item
+in place.
 
 **Find valid hashes** by browsing light.gg with the Season 11 filter:
 
-- [Season 11 weapons on light.gg](https://www.light.gg/db/all/weapons/?filter-fadv=season%3A11)
+- [Season 11 weapons on light.gg](https://www.light.gg/db/all/weapons/?page=1&f=5%2811%29)
 
 The Season 11 filter is a useful starting point but not perfect — it can
 surface items introduced *later* in Season 11's runtime that don't exist in
 the frozen Aug 2020 build. When in doubt, prefer items from earlier seasons
 (Forsaken, Black Armory, Warmind, base game).
 
-The built-in catalog only contains **10 well-known pre-Aug-2020 exotic weapons
-with stable hashes** — no armor, no subclasses, no cosmetics, because those
-went through major hash-changing reworks after Aug 2020.
+The built-in catalog ships **~5,000 items** — every weapon, armor piece,
+ghost, sparrow, ship, emblem, and finisher that existed in the Aug 2020
+Shadowkeep client. The hash list is imported from
+[Sundial](https://github.com/KyleThmpsn/sundial) (a Rust desktop editor that
+reads items directly out of the local Destiny 2 game files) and enriched
+with Bungie's current manifest for names, rarities, and icons.
 
 ## Why a webapp
 
